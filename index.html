@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>🚀 Rocket TON Game</title>
+  <script src="https://unpkg.com/@tonconnect/ui@latest"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #111;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #111;
+      border-bottom: 1px solid #0f0;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: #0f0;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    nav button:hover {
+      background: #0f0;
+      color: #000;
+    }
+    section {
+      padding: 20px;
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    .ton-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #0f0;
+      border: none;
+      color: #000;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>🚀 Rocket TON Game</header>
+  
+  <nav>
+    <button onclick="showTab('home')">Главная</button>
+    <button onclick="showTab('profile')">Профиль</button>
+    <button onclick="showTab('about')">О проекте</button>
+  </nav>
+
+  <section id="home" class="active">
+    <h2>Добро пожаловать!</h2>
+    <p>Запускай ракету, покупай топливо, рискуй и зарабатывай TON!</p>
+    <div id="wallet-connect"></div>
+    <div id="wallet-address"></div>
+  </section>
+
+  <section id="profile">
+    <h2>👤 Профиль игрока</h2>
+    <p>💰 Пополнить TON:</p>
+    <a href="https://tonkeeper.app/transfer/UQAqwXhqugjcRUWDqsxhmaZrm5XDoexVQD7RGCQED4DOCH2f?amount=10000000&text=RocketFuel" target="_blank">
+      <button class="ton-button">💸 Перевести 0.01 TON</button>
+    </a>
+    <p style="margin-top: 10px;">(Вы будете перенаправлены в TON Keeper или другой кошелёк)</p>
+
+    <p>💸 Вывод (вручную, по заявке):</p>
+    <p>⚠️ Напиши в поддержку, чтобы подать заявку на вывод. В будущем будет реализовано автоматически.</p>
+  </section>
+
+  <section id="about">
+    <h2>ℹ️ О проекте</h2>
+    <p>Это Telegram mini-app, в котором игроки могут покупать "топливо" за TON и отправлять ракету на миссию. 
+    После истечения таймера игрок получает Stars или проигрывает вложенное.</p>
+    <p>Также реализован режим "Рискнуть вручную", где шансы 50/50 на удвоение ставки.</p>
+  </section>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://raw.githubusercontent.com/ton-blockchain/ton-connect-demo/master/public/tonconnect-manifest.json',
+      buttonRootId: 'wallet-connect'
+    });
+
+    tonConnectUI.onStatusChange(walletInfo => {
+      if (walletInfo && walletInfo.account) {
+        const address = walletInfo.account.address;
+        document.getElementById("wallet-address").innerText = "🟢 Подключен: " + address;
+      }
+    });
+  </script>
+</body>
+</html>
